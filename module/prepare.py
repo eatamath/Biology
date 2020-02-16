@@ -103,10 +103,13 @@ def MutualInformationFeatureSelection(arr,data):
 #### 数据集分割
 
 def SplitDataset(X,Y):
-    X_train, X_test, Y_train, Y_test = \
-        train_test_split(X,Y,test_size=TRAIN_TEST_SPLIT,random_state = seed)
-    del X,Y
-    return [X_train,X_test,Y_train,Y_test]
+    if TRAIN_TEST_SPLIT>0:
+        X_train, X_test, Y_train, Y_test = \
+            train_test_split(X,Y,test_size=TRAIN_TEST_SPLIT,random_state = seed)
+        del X,Y
+        return [X_train,X_test,Y_train,Y_test]
+    else:
+        return None
 
 #### 二次降维
 
