@@ -98,6 +98,7 @@ def MutualInformationFeatureSelection(arr,data):
     print('dimension ratio %f dimension remained %d'
           %(X.shape[1]/(data[1]+1),
             X.shape[1]))
+    INFO('mutual information sum %f select %f'%(sum(mi),sum(mi[select[:-1]])/sum(mi)) )
     return [X,Y]
 
 #### 数据集分割
