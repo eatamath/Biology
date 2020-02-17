@@ -90,6 +90,7 @@ def ToMatrix(data,matrix_type='sparse'):
 #### 特征选择
 
 def MutualInformationFeatureSelection(arr,data):
+    global ENTROPY_IM
     mi = mutual_info_classif(arr,data[0][1],copy=False,n_neighbors=4)
     select = mi>ENTROPY_IM
     select = np.hstack([select,[False]])
@@ -98,6 +99,7 @@ def MutualInformationFeatureSelection(arr,data):
     print('dimension ratio %f dimension remained %d'
           %(X.shape[1]/(data[1]+1),
             X.shape[1]))
+    INFO('mutual information sum %f select %f'%(sum(mi),sum(mi[select[:-1]])/sum(mi)) )
     return [X,Y]
 
 #### 数据集分割
