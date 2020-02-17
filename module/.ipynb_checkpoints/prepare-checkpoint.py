@@ -61,7 +61,9 @@ GetConfigure()
 
 
 #### 读取数据
-
+'''
+    @data [[dict X,list Y],int feature_num,int protein_feature_num,int rna_feature_num]
+'''
 def ReadData():
     T=trainer(5,-1)
     data = T.MAIN_SINGLE_TEST(DATASET,PROTEIN_K,RNA_K)
@@ -102,12 +104,33 @@ def MutualInformationFeatureSelection(arr,data):
     INFO('mutual information sum %f select %f'%(sum(mi),sum(mi[select[:-1]])/sum(mi)) )
     return [X,Y]
 
+def MutualInformationFeatureSelection2(arr,data,test_ratio=0.3):
+    global ENTROPY_IM
+    [train_arr,test_arr,train_x,test_x,train_y,test_y] = \
+                        train_test_split(arr,data[0][0],data[0][1],test_size=test_ratio)
+    mi = mutual_info_classif(train_arr,train_y,copy=False,n_neighbors=4)
+    select = mi>ENTROPY_IM
+#     select = np.hstack([select,[False]])
+    
+    [Xtrain,Ytrain] = DictionaryToMatrix(train_x,train_y,feature_num=data[1],select=select)
+    [Xtest,Ytest] = DictionaryToMatrix(test_x,test_y,feature_num=data[1],select=select)
+
+    Xtrain = Xtrain[:,select]
+    Xtest = Xtest[:,select]
+    
+    print('dimension ratio %f dimension remained %d'
+          %(Xtrain.shape[1]/data[1],
+            Xtrain.shape[1]))
+    INFO('mutual information sum %f select %f'%(sum(mi),sum(mi[select])/sum(mi)) )
+    INFO('MI params %f'%ENTROPY_IM)
+    return [Xtrain,Xtest,Ytrain,Ytest]
+    
 #### 数据集分割
 
 def SplitDataset(X,Y):
     if TRAIN_TEST_SPLIT>0:
         X_train, X_test, Y_train, Y_test = \
-            train_test_split(X,Y,test_size=TRAIN_TEST_SPLIT,random_state = seed)
+            train_test_split(X,Y,test_size=TRAIN_TEST_SPLIT)
         del X,Y
         return [X_train,X_test,Y_train,Y_test]
     else:

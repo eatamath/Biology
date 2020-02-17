@@ -25,34 +25,25 @@ db = client['reserch']
 def DictionaryToMatrix(X,Y,feature_num,dims=-1,dime=-1,select=[],batch=10000):
     if len(X)!=len(Y):
         print('row number not match')
-        return []
+        return None
     res = []
-    l = len(X)
-    if select==[]:
-        for i in range(l):
-            if dims==-1 and dime==-1:
-                line = [0 for i in range(feature_num+1)]
-                for k,v in X[i].items():
-                    line[k] += v
-                line[-1] = Y[i]
-            else:
-                line = [0 for i in range(dime-dims+2)]
-                for k,v in X[i].items():
-                    if k>=dime and k<=dims:
-                        line[k-dims] = v
-                line[-1] = Y[i]
-            res.append(line)
-            if i%batch==batch-1:
-                print('batch',i/batch)
-    else:
-        for i in range(l):
-            line = [0 for i in range(feature_num)]
-            for k,v in X[i].items():
-                line[k] = v
-            line = np.array(line)[select].tolist()
-            res.append(line)
-    res = np.array(res,copy=False)
-    return res
+    for row in X:
+        if dims==-1 and dime==-1:
+            xrow = [0 for i in range(feature_num)]
+            for k,v in row.items():
+                xrow[k] = v
+            res.append(xrow)
+        elif dims>=0 and dims<feature_num-1 and dime>0 and dime<feature_num:
+            xrow = [0 for i in range(dims,dime)]
+            for k,v in row.items():
+                if k>=dims and k<dime:
+                    xrow[k-dims] = v
+            res.append(xrow)
+    res = np.array(res)
+    if select!=[]:
+        if len(select)==dime-dims:
+            res = res[:,select]
+    return [res,np.array(Y)]
         
 def OutputPairToFile(pairs,path):
     with open(path,'w+') as f:
