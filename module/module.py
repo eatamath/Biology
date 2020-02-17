@@ -71,6 +71,14 @@ def ERR(msg):
         print(e)
     return
 
+def flogging(msg):
+    try:
+        with open('./logging.txt','a+') as f:
+            f.write(str(time.localtime())+'>\t'+msg+'\n')
+    except Exception as e:
+        ERR(e.args)
+    return
+
 #%%
 ### load dataset ###
 class dataLoader:
