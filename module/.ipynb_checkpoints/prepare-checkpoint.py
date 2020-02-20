@@ -54,9 +54,12 @@ def GetConfigure():
     TRAIN_TEST_SPLIT = float( commons[str.lower('TRAIN_TEST_SPLIT')] )
     PARAMS = conf['params']
     PARAMS = dict(eval(PARAMS))
-    return
+    
+    hyper_params = conf['hyper_params']
+    hyper_params = dict(eval(hyper_params))
+    return hyper_params
 
-GetConfigure()
+# GetConfigure()
 
 
 
@@ -127,10 +130,10 @@ def MutualInformationFeatureSelection2(arr,data,test_ratio=0.3):
     
 #### 数据集分割
 
-def SplitDataset(X,Y):
+def SplitDataset(X,Y,test_ratio=0.3):
     if TRAIN_TEST_SPLIT>0:
         X_train, X_test, Y_train, Y_test = \
-            train_test_split(X,Y,test_size=TRAIN_TEST_SPLIT)
+            train_test_split(X,Y,test_size=test_ratio)
         del X,Y
         return [X_train,X_test,Y_train,Y_test]
     else:
@@ -187,3 +190,9 @@ def CleanVariables():
     global X,Y
     del X,Y
     return
+
+#### util functions
+
+### 合并数据集
+def merge_train_test(X_train,X_test,Y_train,Y_test):
+    return [np.vstack([X_train,X_test]),np.append(Y_train,Y_test)]
