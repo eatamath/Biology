@@ -1,33 +1,36 @@
-import numpy as np
-import pandas as pd
-import sklearn
 import gc
 import os
 import re
 import math
 import sys
+from collections import Counter
 import random
 from itertools import islice
 import time
-from scipy.sparse import csr_matrix
-import seaborn as sns
-import matplotlib.pyplot as plt
-import bokeh
-import scipy as sp
-from scipy import stats
-from sklearn.feature_selection import *
-import time
-from joblib import dump, load
 import configparser
 import json
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+import bokeh
+
+import numpy as np
+import pandas as pd
+from scipy.sparse import csr_matrix
+import scipy as sp
+from scipy import stats
+
+import sklearn
+from joblib import dump, load
 from sklearn.decomposition import *
+from sklearn.feature_selection import *
 from sklearn.ensemble import *
-from collections import Counter
 from sklearn.model_selection import *
+from sklearn.linear_model import *
+from sklearn.manifold import *
+import sklearn.tree as Tr 
 
 import lightgbm as lgb
-import sklearn.tree as Tr 
 
 from module.module import *
 from module.process import *
@@ -127,7 +130,51 @@ def MutualInformationFeatureSelection2(arr,data,test_ratio=0.3):
     INFO('mutual information sum %f select %f'%(sum(mi),sum(mi[select])/sum(mi)) )
     INFO('MI params %f'%ENTROPY_IM)
     return [Xtrain,Xtest,Ytrain,Ytest]
-    
+
+### @dense 
+def LassoCVFeatureSelection(X_train,X_test,Y_train,Y_test,param,test_ratio=0.3):
+    clf = LassoCV(cv=5,copy_X=True,fit_intercept=False,random_state=seed)
+    sfm = SelectFromModel(clf, threshold=param['threshold'])
+    sfm.fit(X_train, Y_train)
+    shape0 = X_train.shape
+    X_train = sfm.transform(X_train)
+    X_test = sfm.transform(X_test)
+    shape1 = X_train.shape
+    INFO('lasso model %s'%str(sfm.get_params()))
+    INFO('lasso dimensionality reduction original %d reduced %d remain ration %f'%(shape0[1],shape1[1],shape1[1]/shape0[1]))
+    return [X_train,X_test,Y_train,Y_test]
+
+### @dense 
+def PCADimensionalityReduction(X_train,X_test,Y_train,Y_test):
+    pca = PCA(n_components=2000, random_state=seed)
+    pca.fit(X_train)
+    shape0 = X_train.shape
+    X_train = pca.transform(X_train)
+    X_test = pca.transform(X_test)
+    shape1 = X_train.shape
+    INFO('sPCA model %f'%sum(pca.explained_variance_ratio_))
+    INFO('sPCA dimensionality reduction original %d reduced %d remain ration %f'%(shape0[1],shape1[1],shape1[1]/shape0[1]))
+    return [X_train,X_test,Y_train,Y_test]
+
+### @dense 
+def IsomapDimensionalityReduction(X_train,X_test,Y_train,Y_test):
+    iso = Isomap(n_components=topK, 
+                 neighbors_algorithm='kd_tree',
+                 path_method='D',
+                 eigen_solver='arpack',
+#                  p=1,
+                 max_iter=1000,
+                 n_neighbors=5,
+                 n_jobs=-1)
+    iso.fit(X_train)
+    shape0 = X_train.shape
+    X_train = iso.transform(X_train)
+    X_test = iso.transform(X_test)
+    shape1 = X_train.shape
+    INFO('Isomap model %s'%str(iso.reconstruction_error()))
+    INFO('sPCA dimensionality reduction original %d reduced %d remain ration %f'%(shape0[1],shape1[1],shape1[1]/shape0[1]))
+    return [X_train,X_test,Y_train,Y_test]
+
 #### 数据集分割
 
 def SplitDataset(X,Y,test_ratio=0.3):
@@ -142,7 +189,11 @@ def SplitDataset(X,Y,test_ratio=0.3):
 #### 二次降维
 
 def RandomForestDimensionalityReduction(X_train,X_test,Y_train,Y_test):
-    rfclf = RandomForestClassifier(n_estimators=RF_ENSENBLE,n_jobs=3)
+    rfclf = RandomForestClassifier(n_estimators=RF_ENSENBLE,
+                                   criterion='entropy',
+#                                    max_samples=0.8,
+#                                    max_features='log2', ### default sqrt
+                                   n_jobs=5)
     rfclf.fit(X_train,Y_train)
     rf_fit_score = rfclf.score(X_train,Y_train)
     print('rf raw data fit score %f'%rf_fit_score)
