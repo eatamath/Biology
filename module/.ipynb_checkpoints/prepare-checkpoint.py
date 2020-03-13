@@ -35,10 +35,27 @@ import lightgbm as lgb
 from module.module import *
 from module.process import *
 
+def GetConfigureObject():
+    cfile = configparser.ConfigParser()
+    cfile.read(CONFIGURE_PATH)
+    return cfile
 
 seed = 42
-DATASET = 0
 CONFIGURE_PATH = './conf.ini'
+cfile = GetConfigureObject()
+dataset = dict(cfile.items('dataset'))
+DATASET = int( dataset[str.lower('current')] )
+
+
+def WriteDict(d):
+    with open('./result-temp/result.txt','a+') as f:
+        s = '\n*\n'
+        for k,v in d.items():
+            s += str(k)+'\n'+str(v)+'\n'
+        f.write(s)
+    return
+
+
 
 def GetConfigure():
     global PROTEIN_K,RNA_K,ENTROPY_IM,topK,RF_ENSENBLE,TRAIN_TEST_SPLIT
@@ -72,6 +89,7 @@ def GetConfigure():
 '''
 def ReadData():
     T=trainer(5,-1)
+    print('read data',PROTEIN_K,RNA_K)
     data = T.MAIN_SINGLE_TEST(DATASET,PROTEIN_K,RNA_K)
     return data,T
 
@@ -146,14 +164,14 @@ def LassoCVFeatureSelection(X_train,X_test,Y_train,Y_test,param,test_ratio=0.3):
 
 ### @dense 
 def PCADimensionalityReduction(X_train,X_test,Y_train,Y_test):
-    pca = PCA(n_components=2000, random_state=seed)
+    pca = PCA(n_components=3000, random_state=seed)
     pca.fit(X_train)
     shape0 = X_train.shape
     X_train = pca.transform(X_train)
     X_test = pca.transform(X_test)
     shape1 = X_train.shape
-    INFO('sPCA model %f'%sum(pca.explained_variance_ratio_))
-    INFO('sPCA dimensionality reduction original %d reduced %d remain ration %f'%(shape0[1],shape1[1],shape1[1]/shape0[1]))
+    INFO('PCA model %f'%sum(pca.explained_variance_ratio_))
+    INFO('PCA dimensionality reduction original %d reduced %d remain ration %f'%(shape0[1],shape1[1],shape1[1]/shape0[1]))
     return [X_train,X_test,Y_train,Y_test]
 
 ### @dense 
