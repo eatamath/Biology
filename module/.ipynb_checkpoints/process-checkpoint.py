@@ -99,3 +99,15 @@ def WriteResult(DATASET,cv_result,conf,commons):
         text += '\n'
         f.write(text)
     return
+
+'''
+    split symbol '@'
+'''
+def WriteDictResult(DATASET,dict_obj,fname):
+    with open('./'+fname+'.txt','a+') as f:
+        text = '@'+str(DATASET)+'\n'
+        for k,v in dict_obj.items():
+            text += str(k)+"=\t"+str(v)+'\n'
+        text += '\n'
+        f.write(text)
+    return

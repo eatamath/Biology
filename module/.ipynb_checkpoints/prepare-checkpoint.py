@@ -87,7 +87,7 @@ def GetConfigure():
 '''
     @data [[dict X,list Y],int feature_num,int protein_feature_num,int rna_feature_num]
 '''
-def ReadData():
+def ReadData(PROTEIN_K=2,RNA_K=2):
     T=trainer(5,-1)
     print('read data',PROTEIN_K,RNA_K)
     data = T.MAIN_SINGLE_TEST(DATASET,PROTEIN_K,RNA_K)
@@ -206,7 +206,7 @@ def SplitDataset(X,Y,test_ratio=0.3):
 
 #### 二次降维
 
-def RandomForestDimensionalityReduction(X_train,X_test,Y_train,Y_test):
+def RandomForestDimensionalityReduction(X_train,X_test,Y_train,Y_test,topRatio=0.98):
     rfclf = RandomForestClassifier(n_estimators=RF_ENSENBLE,
                                    criterion='entropy',
 #                                    max_samples=0.8,
@@ -221,11 +221,14 @@ def RandomForestDimensionalityReduction(X_train,X_test,Y_train,Y_test):
     rf_select = list(map(lambda x:[x[0],x[1]],rf_select))
     rf_select = np.array(rf_select)
 
-    print('select top K features importances',sum(rf_select[:topK,1]))
-    rf_select = rf_select[:topK,0]
-    rf_select = rf_select.astype('int32')
-    X_train = X_train[:,rf_select]
-    X_test = X_test[:,rf_select]
+#     print('select top K features importances',sum(rf_select[:topK,1]))
+    rf_select = rf_select[:,0]
+    sum_select = np.cumsum(rf_select)
+    split_idx = np.where(np.cumsum(sum_select)/np.sum(sum_select)>topRatio)[0][0]
+    INFO('dimension remained %d %f'%(split_idx,topRatio))
+#     rf_select = rf_select.astype('int32')
+    X_train = X_train[:,:int(split_idx)]
+    X_test = X_test[:,:int(split_idx)]
     print('dimension remained %d'%X_train.shape[1])
     return [X_train,X_test,Y_train,Y_test]
 
