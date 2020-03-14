@@ -1,0 +1,7 @@
+@0
+test_score=	{'acc': 0.939015606242497, 'auc': 0.9400362983808475}
+train_score=	0.9746083198271205
+RNA_K=	3
+PROTEIN_K=	3
+TOP_RATIO=	0.93
+

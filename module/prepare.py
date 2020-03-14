@@ -87,7 +87,7 @@ def GetConfigure():
 '''
     @data [[dict X,list Y],int feature_num,int protein_feature_num,int rna_feature_num]
 '''
-def ReadData(PROTEIN_K=2,RNA_K=2):
+def ReadData(DATASET=0,PROTEIN_K=2,RNA_K=2):
     T=trainer(5,-1)
     print('read data',PROTEIN_K,RNA_K)
     data = T.MAIN_SINGLE_TEST(DATASET,PROTEIN_K,RNA_K)
