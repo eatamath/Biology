@@ -1,18 +1,19 @@
-# Biology
+# A Research on Interaction between Non-coding RNA and Protein
 
 
 
-## Parameter Tuning Notes
+### Project Summary
 
-### LightGBM
+to study the Mechanism of IncRNA-Protein pairs on Heart-failure
 
-#### Tune Parameters for the Leaf-wise (Best-first) Tree
+### Modeling Description
 
-`num_leaves`
-
-the main parameter to control the complexity of the tree model.
-
-`num_leaves < 2^(max_depth)`
+- using k-mer to decode the RNA & protein sequences containing both base pairs and structure information
+- converting the sequences information into sparse matrix
+- feature selection by RandomForest
+- tuning hyperparameters for LightGBM & XGB & Catboost
+- stacking ensemble
+- model evaluation
 
 
 
