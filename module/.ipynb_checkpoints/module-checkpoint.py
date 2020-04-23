@@ -94,7 +94,7 @@ class dataLoader:
     #### local data root ####
     fileroot='D:\\StatisticsData\\BIODATA\\Data'
     
-    hasNegative=[0,0,1,0,1]
+    hasNegative=[0,0,1,0,1,0,0]
     
     def __init__(self,datasetid,K=3):
         self.dataset_id=datasetid
@@ -103,7 +103,10 @@ class dataLoader:
               'reRPI2825',\
               'RPI488',\
               'RPI2241',\
-              'RPITER_RPI1807']
+              'RPITER_RPI1807',\
+               'LPI43250',\
+                       'EVLncRNAs'   \
+                          ]
         ### control dataset suit
         self.datasetname=self.dataset_suit[datasetid]
         ### sequence data file-name [protein && rna]
@@ -128,6 +131,14 @@ class dataLoader:
         self.seq_datasets[ self.dataset_suit[4] ]={}
         self.seq_datasets[ self.dataset_suit[4] ]['protein']='RPITER_RPI1807_Pall'
         self.seq_datasets[ self.dataset_suit[4] ]['rna']='RPITER_RPI1807Rst'
+
+        self.seq_datasets[ self.dataset_suit[5] ]={}
+        self.seq_datasets[ self.dataset_suit[5] ]['protein']='LPI43250_Pall'
+        self.seq_datasets[ self.dataset_suit[5] ]['rna']='LPI43250_rna17672_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[6] ]={}
+        self.seq_datasets[ self.dataset_suit[6] ]['protein']='EVLncRNAs_protein45_Pall'
+        self.seq_datasets[ self.dataset_suit[6] ]['rna']='EVLncRNAs_rna34_linearfold_bpRNAst'
         
         ### pair file-name
         self.positive_pair_file={}
@@ -136,6 +147,8 @@ class dataLoader:
         self.positive_pair_file[ self.dataset_suit[2] ]=['RPI488_pairs.txt']
         self.positive_pair_file[ self.dataset_suit[3] ]=['RPI2241_pos_pairs.txt','RPI369_pos_pairs.txt']
         self.positive_pair_file[ self.dataset_suit[4] ]=['RPI1807_pairs.txt']
+        self.positive_pair_file[ self.dataset_suit[5] ]=['LPI43250_pos_pairs.txt']
+        self.positive_pair_file[ self.dataset_suit[6] ]=['EVLncRNAs_pos_pairs.txt']
         
         ### cluster file-name
         self.cluster_file_root=''
@@ -151,6 +164,11 @@ class dataLoader:
         self.cluster_file[ self.dataset_suit[3] ]={}
         self.cluster_file[ self.dataset_suit[3] ]['protein']='RPI2241_protein40%_cdhit4.8.1.clstr'
         self.cluster_file[ self.dataset_suit[3] ]['rna']='RPI2241_RNA80%_cdhit4.8.1.clstr'
+        
+        self.cluster_file[ self.dataset_suit[5] ]={}
+        self.cluster_file[ self.dataset_suit[5] ]['protein']='LPI43250_protein56_40%_cdhit4.8.1.clstr'
+        self.cluster_file[ self.dataset_suit[5] ]['rna']='LPI43250_rna17672_80%_cdhit4.8.1.clstr'
+
         return
     
     
@@ -171,6 +189,8 @@ class dataLoader:
                     pattern=''
                     if self.dataset_id==0:
                         pattern='(?<=>).*'
+                    elif self.dataset_id==5:
+                        pass
                     else:pattern='(?<=>).*[_-].*'
                     reresult=re.findall(pattern,content_protein[0])
                     id_extracted=max(reresult,key=lambda x:len(x))
