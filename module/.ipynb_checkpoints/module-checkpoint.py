@@ -79,6 +79,68 @@ def flogging(msg):
         ERR(e.args)
     return
 
+#### data path configuration ####
+class dataPathLoader:
+    data_cluster_root = 'Negative1'
+    fileroot = r'D:\StatisticsData\BIODATA\Data'
+    hasNegative = [0,0,1,0,1,0,0]
+    
+    def __init__(self,datasetid):
+        data_id=datasetid
+        self.dataset_suit=['NPInter10412','reRPI2825','RPI488',
+                           'RPI2241','RPI1807','LPI43250','EVLncRNAs']
+        ### control dataset suit
+        self.datasetname=self.dataset_suit[datasetid]
+        ### sequence data file-name [protein && rna]
+        self.seq_datasets={}
+        
+        self.seq_datasets[ self.dataset_suit[0] ]={}
+        self.seq_datasets[ self.dataset_suit[0] ]['protein']='NPInter10412_Pall'
+        self.seq_datasets[ self.dataset_suit[0] ]['rna']='NPInter10412_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[1] ]={}
+        self.seq_datasets[ self.dataset_suit[1] ]['protein']='reRPI2825_Pall'
+        self.seq_datasets[ self.dataset_suit[1] ]['rna']='reRPI2825_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[2] ]={}
+        self.seq_datasets[ self.dataset_suit[2] ]['protein']='RPI488_Pall'
+        self.seq_datasets[ self.dataset_suit[2] ]['rna']='RPI488_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[3] ]={}
+        self.seq_datasets[ self.dataset_suit[3] ]['protein']='RPI2241_Pall'
+        self.seq_datasets[ self.dataset_suit[3] ]['rna']='RPI2241_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[4] ]={}
+        self.seq_datasets[ self.dataset_suit[4] ]['protein']='RPI1807_Pall'
+        self.seq_datasets[ self.dataset_suit[4] ]['rna']='RPI1807_linearfold_bpRNA'
+
+        self.seq_datasets[ self.dataset_suit[5] ]={}
+        self.seq_datasets[ self.dataset_suit[5] ]['protein']='LPI43250_Pall'
+        self.seq_datasets[ self.dataset_suit[5] ]['rna']='LPI43250_rna17672_linearfold_bpRNA'
+        
+        self.seq_datasets[ self.dataset_suit[6] ]={}
+        self.seq_datasets[ self.dataset_suit[6] ]['protein']='EVLncRNAs_protein45_Pall'
+        self.seq_datasets[ self.dataset_suit[6] ]['rna']='EVLncRNAs_rna34_linearfold_bpRNAst'
+        
+        return
+    
+    def getDataPath(self,data_id=None):
+        if data_id:
+            data_id = data_id
+        self.fileroot = os.path.join(self.fileroot,self.dataset_suit[ data_id ])
+        path_seq_folder_protein = os.path.join(self.fileroot,
+                                               self.seq_datasets[ 
+                                                   self.dataset_suit[ data_id ]
+                                               ]['protein']
+                                              )
+        path_seq_folder_rna = os.path.join(self.fileroot,
+                                           self.seq_datasets[ 
+                                               self.dataset_suit[ data_id ]
+                                           ]['rna']
+                                          )
+        return {'protein':path_seq_folder_protein,'rna':path_seq_folder_rna}
+
+
 #%%
 ### load dataset ###
 class dataLoader:
@@ -94,43 +156,37 @@ class dataLoader:
     #### local data root ####
     fileroot='D:\\StatisticsData\\BIODATA\\Data'
     
-    hasNegative=[0,0,1,0,1,0,0]
+    hasNegative=[0,0,1,0,1,0,1]
     
     def __init__(self,datasetid,K=3):
         self.dataset_id=datasetid
         self.K=K
-        self.dataset_suit=['data_NPInter10412',\
-              'reRPI2825',\
-              'RPI488',\
-              'RPI2241',\
-              'RPITER_RPI1807',\
-               'LPI43250',\
-                       'EVLncRNAs'   \
-                          ]
+        self.dataset_suit=['NPInter10412','reRPI2825','RPI488',
+                           'RPI2241','RPI1807','LPI43250','EVLncRNAs']
         ### control dataset suit
         self.datasetname=self.dataset_suit[datasetid]
         ### sequence data file-name [protein && rna]
         self.seq_datasets={}
         
         self.seq_datasets[ self.dataset_suit[0] ]={}
-        self.seq_datasets[ self.dataset_suit[0] ]['protein']='NP2_Pall'
-        self.seq_datasets[ self.dataset_suit[0] ]['rna']='NP2_Rst'
+        self.seq_datasets[ self.dataset_suit[0] ]['protein']='NPInter10412_Pall'
+        self.seq_datasets[ self.dataset_suit[0] ]['rna']='NPInter10412_linearfold_bpRNA'
         
         self.seq_datasets[ self.dataset_suit[1] ]={}
         self.seq_datasets[ self.dataset_suit[1] ]['protein']='reRPI2825_Pall'
-        self.seq_datasets[ self.dataset_suit[1] ]['rna']='reRPI2825Rst'
+        self.seq_datasets[ self.dataset_suit[1] ]['rna']='reRPI2825_linearfold_bpRNA'
         
         self.seq_datasets[ self.dataset_suit[2] ]={}
         self.seq_datasets[ self.dataset_suit[2] ]['protein']='RPI488_Pall'
-        self.seq_datasets[ self.dataset_suit[2] ]['rna']='RPI488Rst'
+        self.seq_datasets[ self.dataset_suit[2] ]['rna']='RPI488_linearfold_bpRNA'
         
         self.seq_datasets[ self.dataset_suit[3] ]={}
         self.seq_datasets[ self.dataset_suit[3] ]['protein']='RPI2241_Pall'
-        self.seq_datasets[ self.dataset_suit[3] ]['rna']='RPI2241Rst'
+        self.seq_datasets[ self.dataset_suit[3] ]['rna']='RPI2241_linearfold_bpRNA'
         
         self.seq_datasets[ self.dataset_suit[4] ]={}
-        self.seq_datasets[ self.dataset_suit[4] ]['protein']='RPITER_RPI1807_Pall'
-        self.seq_datasets[ self.dataset_suit[4] ]['rna']='RPITER_RPI1807Rst'
+        self.seq_datasets[ self.dataset_suit[4] ]['protein']='RPI1807_Pall'
+        self.seq_datasets[ self.dataset_suit[4] ]['rna']='RPI1807_linearfold_bpRNA'
 
         self.seq_datasets[ self.dataset_suit[5] ]={}
         self.seq_datasets[ self.dataset_suit[5] ]['protein']='LPI43250_Pall'
@@ -139,10 +195,11 @@ class dataLoader:
         self.seq_datasets[ self.dataset_suit[6] ]={}
         self.seq_datasets[ self.dataset_suit[6] ]['protein']='EVLncRNAs_protein45_Pall'
         self.seq_datasets[ self.dataset_suit[6] ]['rna']='EVLncRNAs_rna34_linearfold_bpRNAst'
+
         
         ### pair file-name
         self.positive_pair_file={}
-        self.positive_pair_file[ self.dataset_suit[0] ]=['NPInter10412_pairs_pos.txt']
+        self.positive_pair_file[ self.dataset_suit[0] ]=['NPInter10412_pos_pairs.txt']
         self.positive_pair_file[ self.dataset_suit[1] ]=['RPI2825_pos_pairs.txt','RPI390_pos_pairs.txt']
         self.positive_pair_file[ self.dataset_suit[2] ]=['RPI488_pairs.txt']
         self.positive_pair_file[ self.dataset_suit[3] ]=['RPI2241_pos_pairs.txt','RPI369_pos_pairs.txt']
@@ -162,8 +219,8 @@ class dataLoader:
         self.cluster_file[ self.dataset_suit[1] ]['rna']='reRPI2825_RNA80%_cdhit4.8.1.clstr'
         
         self.cluster_file[ self.dataset_suit[3] ]={}
-        self.cluster_file[ self.dataset_suit[3] ]['protein']='RPI2241_protein40%_cdhit4.8.1.clstr'
-        self.cluster_file[ self.dataset_suit[3] ]['rna']='RPI2241_RNA80%_cdhit4.8.1.clstr'
+        self.cluster_file[ self.dataset_suit[3] ]['protein']='RPI2241_positive_protein40%_cdhit4.8.1.clstr'
+        self.cluster_file[ self.dataset_suit[3] ]['rna']='RPI2241_positive_RNA80%_cdhit4.8.1.clstr'
         
         self.cluster_file[ self.dataset_suit[5] ]={}
         self.cluster_file[ self.dataset_suit[5] ]['protein']='LPI43250_protein56_40%_cdhit4.8.1.clstr'
@@ -186,18 +243,10 @@ class dataLoader:
                 with open(openfilepath,'r') as f:
                     text=f.read()
                     content_protein=text.split('\n')[0:6] ### 文本需求？
-                    pattern=''
-                    if self.dataset_id==0:
-                        pattern='(?<=>).*'
-                    elif self.dataset_id==5:
-                        pass
-                    else:pattern='(?<=>).*[_-].*'
-                    reresult=re.findall(pattern,content_protein[0])
-                    id_extracted=max(reresult,key=lambda x:len(x))
-                    content_protein[0]=id_extracted
+                    content_protein[0] = content_protein[0].lstrip('>')
                     proteinInfo=content_protein
                 if proteinInfo[0] in seq_protein_array.keys():
-                    print('dict error key already exists! '+proteinInfo[0])
+                    print('ERROR:: duplicate protein when reading seq files ',proteinInfo[0])
                 else:
                     seq_protein_array[proteinInfo[0]]=proteinInfo
         return seq_protein_array
@@ -213,17 +262,11 @@ class dataLoader:
                 with open(openfilepath,'r') as f:
                     text=f.read()
                     content_rna=text.split('\n')[0:7] 
-                    if self.dataset_id==0:
-                        pattern=' \w*'
-                    else:pattern='.{4}[_-].*'
-                    reresult=re.findall(pattern,content_rna[0])
-                    id_extracted=max(reresult,key=lambda x:len(x))
-                    content_rna[0]=id_extracted.lstrip(' ')### for data 0
-                    content_rna.pop(1)
-                    content_rna.pop(1)
+                    content_rna[0] = re.split('#Name: ',content_rna[0])[1]
+                    [content_rna.pop(1) for i in range(2)]
                     rnaInfo=content_rna
                 if rnaInfo[0] in seq_rna_array.keys():
-                    print('dict error key already exists! '+rnaInfo[0])
+                    print('ERROR:: duplicate rna when reading seq files ',rnaInfo[0])
                 else:
                     seq_rna_array[rnaInfo[0]]=rnaInfo
                 
@@ -253,16 +296,15 @@ class dataLoader:
                 for line in content_cluster:
                     if '>Cluster' in line:
                         lastgroupid=re.search('[0-9]+',line)[0]
-                    elif re.search('>[-\w]*',line):
-                        name=re.search('>[-\w]*',line)[0]
-                        if len(name)<4:### debug regrex result
-                            print('regex error '+line)
-                        name=name.lstrip('>')
-                        if name not in clusters_protein.keys():### repetition may cause override
-                            clusters_protein[name]=lastgroupid
-                        else:print('error protein recorded in cluster '+str(name))
                     else:
-                        print('regex error '+line)
+                        reg_result = re.findall('>(.+)\.\.\.',line)
+                        if len(reg_result):
+                            name = reg_result[0]
+                            if name not in clusters_protein.keys():### repetition may cause override
+                                clusters_protein[name]=lastgroupid
+                            else:print('error protein recorded in cluster '+str(name))
+                        else:
+                            print('ERROR:: regex ',line)
             
             ### get the rna cluster file path
             rna_fname_cluster=self.cluster_file[self.datasetname]['rna']
@@ -277,16 +319,16 @@ class dataLoader:
                 for line in content_cluster:
                     if '>Cluster' in line:
                         lastgroupid=re.search('[0-9]+',line)[0]
-                    elif re.search('>[-\w]*',line):
-                        name=re.search('>[-\w]*',line)[0]
-                        if len(name)<4:### debug regrex result
-                            print('regex error '+line)
-                        name=name.lstrip('>')
-                        if name not in clusters_rna.keys():
-                            clusters_rna[name]=lastgroupid
-                        else:print('error rna recorded in cluster '+str(name))
                     else:
-                        print('regex error '+line)
+                        reg_result = re.findall('>(.+)\.\.\.',line)
+                        if len(reg_result):
+                            name = reg_result[0]
+                            if name not in clusters_rna.keys():### repetition may cause override
+                                clusters_rna[name]=lastgroupid
+                            else:print('error rna recorded in cluster '+str(name))
+                        else:
+                            print('ERROR:: regex ',line)
+                            
         return [clusters_protein,clusters_rna]
     
     ''' read the pair from file
@@ -432,6 +474,7 @@ class dataLoader:
                         'N':1,'W':1,'S':1,'Q':1,'Y':1,'G':1,'T':1,
                         'P':2,'M':2,'F':2,'D':2,'A':2,'V':2,'L':2,'I':2,
                         'C':3,'E':3}
+        singleSeqProtein[1] = singleSeqProtein[1].lstrip('X')
         newseq=''
         for item in singleSeqProtein[1]:
             if item not in structureclass.keys():
@@ -476,6 +519,7 @@ class dataLoader:
         feature=[]
         # filter the sequence
         structureclass={'A':0,'U':1,'G':2,'C':3}
+        singleSeqRna[1] = singleSeqRna[1].lstrip('X')
         newseq=''
         for item in singleSeqRna[1]:
             if item not in structureclass.keys():
@@ -575,22 +619,33 @@ class dataLoader:
     '''
     def matrixTransformation(self,total_features,all_pairs,protein_features,rna_features,flag='train'):
         total_features=np.array(list(total_features)) ### make dict to accelerate
-        # DEBUG('total features count '+str(len(total_features)))
+        print('DEBUG:: total features count ',str(len(total_features)))
+        
         tf_dict={} ### record {feature : feature idx}
         for i,line in zip(range(len(total_features)),total_features):
             tf_dict[line]=i
+#         print(all_pairs)
         X=[]
         Y=[]
-        for i,pair in zip(range(len(all_pairs)),all_pairs):
+        for i,pair in enumerate(all_pairs):
             item=pair.split(',')
             if len(item)!=2 or len(pair)<3:
                 print('error pair number is not 2 '+item)
                 continue
+                
             y=all_pairs[pair]
-            pfeature=protein_features[item[0]]
-            rfeature=rna_features[item[1]]
+            
+            try:
+                pfeature=protein_features[item[0]]
+            except Exception as e:
+                print('ERROR:: protein ',e,item[0])
+                
+            try:
+                rfeature=rna_features[item[1]]
+            except Exception as e:
+                print('ERROR:: rna ',e,item[1])
+                
             x = {}
-            # x=[0 for i in range(len(total_features))]# sparse features {idx : feature_freq}
             for pf in pfeature:
                 try:
                     idx=tf_dict[pf] ### originally tf.index 
