@@ -47,6 +47,8 @@ dataset = dict(cfile.items('dataset'))
 DATASET = int( dataset[str.lower('current')] )
 
 
+RF_ENSENBLE = 1000
+
 def WriteDict(d):
     with open('./result-temp/result.txt','a+') as f:
         s = '\n*\n'
@@ -196,7 +198,7 @@ def IsomapDimensionalityReduction(X_train,X_test,Y_train,Y_test):
 #### 数据集分割
 
 def SplitDataset(X,Y,test_ratio=0.3):
-    if TRAIN_TEST_SPLIT>0:
+    if test_ratio>0:
         X_train, X_test, Y_train, Y_test = \
             train_test_split(X,Y,test_size=test_ratio)
         del X,Y
