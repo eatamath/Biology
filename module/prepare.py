@@ -213,7 +213,7 @@ def RandomForestDimensionalityReduction(X_train,X_test,Y_train,Y_test,topRatio=0
                                    criterion='entropy',
 #                                    max_samples=0.8,
 #                                    max_features='log2', ### default sqrt
-                                   n_jobs=10)
+                                   n_jobs=15)
     rfclf.fit(X_train,Y_train)
     rf_fit_score = rfclf.score(X_train,Y_train)
     print('rf raw data fit score %f'%rf_fit_score)

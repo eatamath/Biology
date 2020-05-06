@@ -36,8 +36,8 @@ def scoreFunction(Ypred,Ytest):
     
     scores['acc'] = acc
     scores['auc'] = auc
-    scores['fpr'] = fpr
-    scores['tpr'] = tpr
+    scores['fpr'] = list(fpr)
+    scores['tpr'] = list(tpr)
     scores['mcc'] = mcc
     scores['tnr'] = tnr
     scores['ppv'] = ppv
