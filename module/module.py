@@ -82,7 +82,8 @@ def flogging(msg):
 #### data path configuration ####
 class dataPathLoader:
     data_cluster_root = 'Negative1'
-    fileroot = r'D:\StatisticsData\BIODATA\Data'
+#     fileroot = r'D:\StatisticsData\BIODATA\Data'
+    fileroot = r'D:\StatisticsData\BIODATA\Data\Data'
     hasNegative = [0,0,1,0,1,0,0]
     
     def __init__(self,datasetid):
@@ -154,7 +155,8 @@ class dataLoader:
     #### cluster data root ####
     # fileroot='//home/ossfsData'
     #### local data root ####
-    fileroot='D:\\StatisticsData\\BIODATA\\Data'
+#     fileroot='D:\\StatisticsData\\BIODATA\\Data'
+    fileroot = r'D:\StatisticsData\BIODATA\Data\Data'
     
     hasNegative=[0,0,1,0,1,0,1]
     

@@ -16,10 +16,13 @@ def scoreFunction(Ypred,Ytest):
     
     tn = sum((Ypred==0) & (Ytest==0))
     fp = sum((Ypred==1) & (Ytest==0))
+    fn = sum((Ypred==0) & (Ytest==1))
     tnr = float(tn)/(fp+tn)
     
     tp = sum((Ypred==1) & (Ytest==1))
     ppv = float(tp)/(tp+fp)
+    
+    sensitivity = float(tp)/(tp+fn)
     
     f_score = metrics.f1_score(Ytest, Ypred)
     
@@ -41,6 +44,6 @@ def scoreFunction(Ypred,Ytest):
     scores['f_score'] = f_score
     scores['ap'] = ap
     scores['brier'] = brier
-    scores['recall'] = recall
+    scores['sensitivity'] = sensitivity
     
     return scores
